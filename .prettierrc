@@ -1,0 +1,16 @@
+{
+    "tabWidth": 2,
+    "useTabs": false,
+    "endOfLine": "auto",
+    "semi": true,
+    "singleQuote": true,
+    "printWidth": 80,
+    "bracketSpacing": true,
+    "bracketLine": true,
+    "arrowParens": "always",
+    "bracketSameLine": false,
+    "curly": "all",
+    "space": {
+      "binaryOps": " "
+    }
+  }
