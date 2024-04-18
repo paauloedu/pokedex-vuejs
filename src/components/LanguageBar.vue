@@ -19,7 +19,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .flex span {
   cursor: pointer;
   padding: 0 10px;

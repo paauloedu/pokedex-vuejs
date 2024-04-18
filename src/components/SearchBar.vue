@@ -1,22 +1,34 @@
 <template>
   <v-autocomplete
-    auto-select-first
     density="comfortable"
     item-props
-    menu-icon=""
-    :placeholder="$t('search_placeholder')"
+    :label="$t('search_placeholder')"
     prepend-inner-icon="mdi-magnify"
     rounded
     theme="light"
     variant="outlined"
     hide-no-data
     hide-details
+    :items="pokemonsName"
+    clearable
   ></v-autocomplete>
 </template>
+
+<script>
+export default {
+  props: {
+    pokemonsName: {
+      type: Array,
+      required: true,
+    },
+  },
+};
+</script>
 
 <style scoped>
 .v-autocomplete {
   margin-right: 10px;
+  text-transform: capitalize;
 }
 :deep(.v-field__input) {
   /* font-size: 13px; */

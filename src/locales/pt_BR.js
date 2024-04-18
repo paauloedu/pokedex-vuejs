@@ -7,4 +7,6 @@ export const pt_BR = {
     'Aventure-se pela nossa Pokedex completa e descubra os segredos do mundo Pokémon.',
   search: 'Procure um Pokémon pelo nome ou usando seu número Pokedex Nacional',
   search_placeholder: 'Buscar pelo Pokémon desejado...',
+  type: 'Tipo',
+  specie: 'Espécie',
 };

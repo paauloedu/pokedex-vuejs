@@ -48,6 +48,8 @@ export default {
           return 'grey darken-4';
         case 'fairy':
           return 'pink lighten-3';
+        case 'shadow':
+          return 'purple';
         default:
           return '';
       }
