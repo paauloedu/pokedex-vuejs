@@ -2,8 +2,8 @@
   <LanguageBar />
   <h1>Pokedex</h1>
   <p>{{ $t('search') }}</p>
-  <FiltersBar />
-  <PokemonsList />
+  <FiltersBar @pokemons-filtrados="atualizarHomePage" />
+  <PokemonsList :pokemonsFiltrados="pokemonsFiltrados" />
 </template>
 
 <script>
@@ -12,7 +12,17 @@ import FiltersBar from '../components/FiltersBar.vue';
 import PokemonsList from '../components/PokemonsList.vue';
 
 export default {
+  data() {
+    return {
+      pokemonsFiltrados: [],
+    };
+  },
   components: { LanguageBar, FiltersBar, PokemonsList },
+  methods: {
+    atualizarHomePage(pokemons) {
+      this.pokemonsFiltrados = pokemons;
+    },
+  },
 };
 </script>
 

@@ -10,6 +10,7 @@ export default {
     typeName: String,
   },
   computed: {
+    // FIXME: CORRIGIR unk e shadow
     typeColor() {
       switch (this.typeName) {
         case 'normal':

@@ -1,7 +1,13 @@
 <template>
+  <!-- FIXME: Fazer o caso para busca vazia -->
   <div class="flex list">
-    <div v-for="(pokemon, index) in pokemons" :key="index" class="card column">
-      <v-img :src="pokemon.imageUrl" />
+    <router-link
+      :to="'/pokemon/' + pokemon.id"
+      v-for="(pokemon, index) in localPokemonsFiltrados"
+      :key="index"
+      class="card column"
+    >
+      <v-img class="pokemon-img" :src="pokemon.imageUrl" />
       <div class="flex">
         <span class="pokemon-id">N°{{ pokemon.id }}</span>
         <p class="pokemon-name">{{ pokemon.name }}</p>
@@ -16,7 +22,7 @@
           />
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -25,13 +31,20 @@ import { obterPokemons } from '../services/pokemonsService';
 import PokemonType from './PokemonType.vue';
 
 export default {
+  props: {
+    pokemonsFiltrados: {
+      type: Array,
+    },
+  },
   data() {
     return {
       pokemons: [],
+      localPokemonsFiltrados: [],
       pagination: {
         limit: 20,
         offset: 0,
       },
+      loading: false,
     };
   },
   components: { PokemonType },
@@ -44,7 +57,17 @@ export default {
   unmounted() {
     window.removeEventListener('scroll', this.handleScroll);
   },
+
+  watch: {
+    pokemonsFiltrados(newPokemons) {
+      this.localPokemonsFiltrados = newPokemons;
+      this.pagination.offset = 0; // Reset offset to start from the beginning
+      this.temPokemonsFiltrados = newPokemons.length > 0;
+    },
+  },
+
   methods: {
+    // TODO: Pokemons com imageURl null, tratar
     async obterListaDePokemons() {
       try {
         const { limit, offset } = this.pagination;
@@ -52,6 +75,9 @@ export default {
           limit,
           offset,
         });
+
+        // Os pokemons que quero exibir são os filtrados
+        this.localPokemonsFiltrados = [...this.pokemons];
       } catch (error) {
         console.log(error);
       }
@@ -59,20 +85,32 @@ export default {
 
     async obterMaisPokemons() {
       try {
-        const { limit } = this.pagination;
-        this.pagination.offset += limit;
-        const novosPokemons = await obterPokemons({
-          limit,
-          offset: this.pagination.offset,
-        });
-        this.pokemons = this.pokemons.concat(novosPokemons);
+        if (!this.loading && !this.temPokemonsFiltrados) {
+          this.loading = true;
+
+          const { limit } = this.pagination;
+          this.pagination.offset += limit;
+          const novosPokemons = await obterPokemons({
+            limit,
+            offset: this.pagination.offset,
+          });
+          this.localPokemonsFiltrados =
+            this.localPokemonsFiltrados.concat(novosPokemons);
+        }
       } catch (error) {
         console.error('Erro ao carregar mais Pokémon:', error);
+      } finally {
+        this.loading = false;
       }
     },
 
     handleScroll() {
-      if (this.chegouAoFinalDaPagina()) {
+      //Verifico se ja carregou, chegou ao fim e se ja filtrei por pokemons
+      if (
+        !this.loading &&
+        this.chegouAoFinalDaPagina() &&
+        !this.temPokemonsFiltrados
+      ) {
         this.obterMaisPokemons();
       }
     },
@@ -101,11 +139,22 @@ export default {
   border-radius: 15px;
   gap: 5px;
   flex: 1 1 15%;
+  transition: box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card:hover .pokemon-img {
+  transform: translateY(-10px);
 }
 .card .flex {
   align-items: center;
   flex-direction: column;
   gap: 5px;
+}
+.pokemon-img {
+  transition: transform 1.2s ease;
 }
 .pokemon-id {
   color: var(--cinza-escuro);

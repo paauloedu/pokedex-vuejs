@@ -1,7 +1,9 @@
 <template>
   <header class="banner">
     <div class="apresentacao">
-      <img src="../assets/img/logo.png" alt="Logo Pokemon" class="logo" />
+      <router-link to="/">
+        <img src="../assets/img/logo.png" alt="Logo Pokemon" class="logo" />
+      </router-link>
 
       <p class="cabecalho-lg frase-cabecalho">
         <span class="texto-vermelho">{{ $t('header.find_pokemons') }}</span>

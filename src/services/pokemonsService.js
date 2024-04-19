@@ -7,12 +7,15 @@ export const obterPokemons = async (params = {}) => {
 
     const dadosAdicionaisPokemon = await Promise.all(
       results.map(async (pokemon) => {
-        const { id, types, imageUrl, specie } = await obterMaisInformacoes(
-          pokemon.url
-        );
+        // Extraindo o id da url
+        const match = pokemon.url.match(/\/(\d+)\/$/);
+        const pokemonId = match ? match[1] : null;
+
+        const { name, id, types, imageUrl, specie } =
+          await obterPokemonBasicoPorId(pokemonId);
 
         return {
-          name: pokemon.name,
+          name,
           id,
           types,
           specie: specie,
@@ -28,12 +31,13 @@ export const obterPokemons = async (params = {}) => {
   }
 };
 
-async function obterMaisInformacoes(url) {
-  const response = await apiService.get(url);
-  const { id, types, sprites } = response.data;
-  const { specie } = await obterEspecie(url);
+async function obterPokemonBasicoPorId(pokemonId) {
+  const response = await apiService.get(`/pokemon/${pokemonId}`);
+  const { name, id, types, sprites } = response.data;
+  const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
 
   return {
+    name,
     id,
     types,
     specie: specie,
@@ -66,4 +70,20 @@ export const obterTodosTiposDePokemon = async () => {
     console.error('Não foi possível obter os tipos:', error);
     throw error;
   }
+};
+
+export const obterPokemonPorId = async (pokemonId) => {
+  const response = await apiService.get(`/pokemon/${pokemonId}`);
+  const { name, id, types, sprites } = response.data;
+  const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
+
+  return {
+    name,
+    id,
+    types,
+    specie: specie,
+    imageUrl: sprites.other.home.front_default,
+    gif: sprites.other.showdown.front_default,
+    sprites: [sprites.front_default, sprites.front_shiny],
+  };
 };
