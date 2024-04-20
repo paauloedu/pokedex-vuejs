@@ -1,4 +1,8 @@
 import { apiService } from './apiService';
+import { extrairIdPelaUrl } from '../utils/pokemonUtils';
+import { extrairTodasSpriteUrl } from '../utils/pokemonUtils';
+import { limparDetalhesDeEvolucoes } from '../utils/pokemonUtils';
+import { mapearEvolucaoPokemon } from '../utils/pokemonUtils';
 
 export const obterPokemons = async (params = {}) => {
   try {
@@ -7,9 +11,7 @@ export const obterPokemons = async (params = {}) => {
 
     const dadosAdicionaisPokemon = await Promise.all(
       results.map(async (pokemon) => {
-        // Extraindo o id da url
-        const match = pokemon.url.match(/\/(\d+)\/$/);
-        const pokemonId = match ? match[1] : null;
+        const pokemonId = extrairIdPelaUrl(pokemon.url);
 
         const { name, id, types, imageUrl, specie } =
           await obterPokemonBasicoPorId(pokemonId);
@@ -50,6 +52,7 @@ async function obterEspecie(pokemonUrl) {
   const response = await apiService.get(pokemonUrl);
   const { species } = response.data;
 
+  //TODO: utils
   const especieResponse = await apiService.get(species.url);
   const genusEn = especieResponse.data.genera.find(
     (genus) => genus.language.name === 'en'
@@ -74,8 +77,19 @@ export const obterTodosTiposDePokemon = async () => {
 
 export const obterPokemonPorId = async (pokemonId) => {
   const response = await apiService.get(`/pokemon/${pokemonId}`);
-  const { name, id, types, sprites } = response.data;
+  const { name, id, types, sprites, species } = response.data;
   const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
+
+  const speciesId = extrairIdPelaUrl(species.url);
+
+  const { chain } = await obterCadeiaDeEvolucao(speciesId);
+  const chainFiltrado = limparDetalhesDeEvolucoes(chain);
+  console.log(chainFiltrado);
+  const evolution = mapearEvolucaoPokemon(chainFiltrado);
+  console.log(evolution);
+
+  const imagemUrls = extrairTodasSpriteUrl(sprites);
+  console.log(imagemUrls);
 
   return {
     name,
@@ -84,6 +98,42 @@ export const obterPokemonPorId = async (pokemonId) => {
     specie: specie,
     imageUrl: sprites.other.home.front_default,
     gif: sprites.other.showdown.front_default,
-    sprites: [sprites.front_default, sprites.front_shiny],
+    sprites: imagemUrls,
+    evolution: evolution,
   };
+};
+
+async function obterCadeiaDeEvolucao(pokemonId) {
+  try {
+    const response = await apiService.get(`/pokemon-species/${pokemonId}`);
+    const { url } = response.data.evolution_chain;
+
+    // Extraindo o id da url
+    const evolutionId = extrairIdPelaUrl(url);
+    console.log(evolutionId);
+
+    const responseEvolutionChain = await apiService.get(
+      `/evolution-chain/${evolutionId}`
+    );
+
+    return responseEvolutionChain.data;
+  } catch (error) {
+    console.error('Não foi possível obter a cadeia de evolução:', error);
+    throw error;
+  }
+}
+
+export const obterUrlDaImagemDoPokemon = async (pokemonName) => {
+  try {
+    const response = await apiService.get(`/pokemon/${pokemonName}`);
+    const { sprites } = response.data;
+    if (sprites && sprites.other) {
+      const imageUrl = sprites.other.home.front_default;
+      return imageUrl;
+    }
+    return null;
+  } catch (error) {
+    console.error('Não foi possível obter a imagem:', error);
+    throw error;
+  }
 };
