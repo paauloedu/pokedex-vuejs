@@ -27,7 +27,7 @@ export default {
 
 <style scoped>
 .v-autocomplete {
-  margin-right: 10px;
+  /* margin-right: 10px; */
   text-transform: capitalize;
 }
 :deep(.v-field__input) {

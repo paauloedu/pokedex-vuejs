@@ -60,6 +60,15 @@
     margin-left: auto;
     margin-right: auto;
   }
+  .foto-banner {
+    width: 25rem;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .foto-banner {
+    width: 25rem;
+  }
 }
 
 @media only screen and (max-width: 767px) {
@@ -69,6 +78,18 @@
 
   .foto-banner {
     width: min(100%, 21.25rem);
+  }
+}
+
+@media only screen and (max-width: 479px) {
+  .foto-banner {
+    display: none;
+  }
+  .frase-cabecalho {
+    font-size: 36px;
+  }
+  p.subtitulo-lg {
+    font-size: 1.3em;
   }
 }
 </style>

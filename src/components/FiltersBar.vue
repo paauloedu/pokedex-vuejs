@@ -5,7 +5,7 @@
     <SearchBar
       v-model="nomeSelecionado"
       :pokemonsName="nomes"
-      style="flex: 1 1 50%"
+      class="search-bar"
     />
 
     <!-- Filtro por Tipo -->
@@ -19,7 +19,7 @@
       clearable
       hide-no-data
       hide-details
-      style="flex: 1 1 20%"
+      class="filter-type"
     ></v-autocomplete>
 
     <!-- Filtro por Espécie -->
@@ -33,7 +33,7 @@
       clearable
       hide-no-data
       hide-details
-      style="flex: 1 1 20%"
+      class="filter-specie"
     ></v-autocomplete>
 
     <!-- Botão filtrar -->
@@ -43,6 +43,7 @@
         color="#80909F"
         rounded
         outlined
+        class="filter-button"
         style="height: 100%"
       >
         <v-icon color="white" icon="mdi-reload" />
@@ -82,7 +83,7 @@ export default {
         this.tipos = await obterTodosTiposDePokemon();
 
         // TODO: AJUSTAR posteriormente
-        // Nomes com ID
+        // Nomes com ID capitalize
         this.nomes = this.pokemons.map(
           (pokemon) => `${this.capitalize(pokemon.name)} (${pokemon.id})`
         );
@@ -142,5 +143,48 @@ export default {
 .flex {
   width: 100%;
   gap: 20px;
+}
+.search-bar {
+  flex: 1 1 50%;
+}
+.filter-type,
+.filter-specie {
+  flex: 1 1 20%;
+}
+@media only screen and (min-width: 1024px) and (max-width: 1299px) {
+  .search-bar {
+    flex: 1 1 44%;
+  }
+  .filter-type,
+  .filter-specie {
+    flex: 1 1 23%;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .flex {
+    flex-wrap: wrap;
+  }
+  .flex .search-bar {
+    flex: 1 1 100%;
+  }
+  .flex .filter-type,
+  .flex .filter-specie,
+  .flex div {
+    margin-top: 10px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .flex {
+    flex-wrap: wrap;
+  }
+  .flex .search-bar,
+  .flex .filter-type {
+    flex: 1 1 100%;
+  }
+}
+
+@media only screen and (max-width: 479px) {
 }
 </style>

@@ -77,7 +77,7 @@ export const obterTodosTiposDePokemon = async () => {
 
 export const obterPokemonPorId = async (pokemonId) => {
   const response = await apiService.get(`/pokemon/${pokemonId}`);
-  const { name, id, types, sprites, species } = response.data;
+  const { name, id, types, sprites, species, game_indices } = response.data;
   const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
 
   const speciesId = extrairIdPelaUrl(species.url);
@@ -100,6 +100,7 @@ export const obterPokemonPorId = async (pokemonId) => {
     gif: sprites.other.showdown.front_default,
     sprites: imagemUrls,
     evolution: evolution,
+    game_indices,
   };
 };
 

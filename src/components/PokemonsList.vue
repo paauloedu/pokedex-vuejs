@@ -1,6 +1,11 @@
 <template>
   <!-- FIXME: Fazer o caso para busca vazia -->
-  <div class="flex list">
+  <div class="not-content" v-if="this.localPokemonsFiltrados.length === 0">
+    <div class="content">
+      <h3>Não há pokemons que atendam a esse filtro.</h3>
+    </div>
+  </div>
+  <div class="flex list" v-else>
     <router-link
       :to="'/pokemon/' + pokemon.id"
       v-for="(pokemon, index) in localPokemonsFiltrados"
@@ -60,9 +65,15 @@ export default {
 
   watch: {
     pokemonsFiltrados(newPokemons) {
+      this.temPokemonsFiltrados = true;
       this.localPokemonsFiltrados = newPokemons;
-      this.pagination.offset = 0; // Reset offset to start from the beginning
-      this.temPokemonsFiltrados = newPokemons.length > 0;
+      this.pagination.offset = 0;
+      // console.log('valor de newPokemons', newPokemons);
+      // // Tem Pokemon Filtrado caso o Array retorne dados ou retorne Vazio
+      // if (newPokemons.length > 0 || newPokemons === []) {
+      //   this.temPokemonsFiltrados = true;
+      // }
+      // console.log('aq', this.temPokemonsFiltrados);
     },
   },
 
@@ -131,6 +142,7 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 25px;
+  min-height: 600px;
 }
 .card {
   display: flex;
@@ -141,6 +153,8 @@ export default {
   flex: 1 1 15%;
   transition: box-shadow 0.2s ease;
   cursor: pointer;
+  height: 385px;
+  width: 258px;
 }
 .card:hover {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -167,8 +181,12 @@ export default {
 .pokemon-name {
   text-transform: capitalize;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 19px;
   color: var(--azul-escuro);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
 }
 .pokemon-type {
   display: flex;
@@ -178,5 +196,14 @@ export default {
 }
 .column {
   flex-direction: column;
+}
+.not-content {
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content {
+  text-align: center;
 }
 </style>

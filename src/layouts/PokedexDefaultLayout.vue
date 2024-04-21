@@ -27,4 +27,14 @@ export default {
   align-items: center;
   gap: 1rem;
 }
+@media only screen and (max-width: 767px) {
+  .principal {
+    padding: 2.5rem 4.5rem;
+  }
+}
+@media only screen and (max-width: 479px) {
+  .principal {
+    padding: 2.5rem 3.5rem;
+  }
+}
 </style>

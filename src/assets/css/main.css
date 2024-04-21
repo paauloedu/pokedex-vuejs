@@ -1,11 +1,15 @@
 :root {
   --vermelho-escuro: #ee4035;
   --vermelho-medio: #ff1100;
+  --vermelho-claro: #d33f59;
   --amarelo-escuro: #ffcb05;
   --cinza-claro: #f6f8fc;
   --cinza-escuro: #777d88;
   --branco: #fff;
   --azul-escuro: #222a43;
+  --azul-claro: #394980;
+  --branco-detalhe: #f4f4f4;
+  --cinza-detalhe: #dad7d7;
 
   --font-family-padrao: Nunito Sans, sans-serif;
   --cabecalhos: Paytone One, sans-serif;
@@ -79,6 +83,17 @@ body::before {
 .paragrafo {
   font-size: 1.125em;
   line-height: 150%; /* 1.6875em */
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--branco-detalhe);
+}
+::-webkit-scrollbar {
+  width: 6px;
+  background: var(--branco-detalhe);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cinza-detalhe);
 }
 
 @media only screen and (max-width: 767px) {

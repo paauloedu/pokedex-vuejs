@@ -20,6 +20,9 @@ export default {
 </script>
 
 <style scoped>
+.flex {
+  align-items: center;
+}
 .flex span {
   cursor: pointer;
   padding: 0 10px;

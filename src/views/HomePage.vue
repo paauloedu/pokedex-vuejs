@@ -1,6 +1,6 @@
 <template>
   <LanguageBar />
-  <h1>Pokedex</h1>
+  <h1>Pokédex</h1>
   <p>{{ $t('search') }}</p>
   <FiltersBar @pokemons-filtrados="atualizarHomePage" />
   <PokemonsList :pokemonsFiltrados="pokemonsFiltrados" />

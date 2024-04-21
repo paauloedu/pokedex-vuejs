@@ -21,23 +21,12 @@
         />
       </div>
 
-      <h2>Sprites</h2>
-      <hr />
-      <div class="imagens-sprites">
-        <v-img
-          v-for="(sprite, spriteIndex) in pokemon.sprites"
-          :key="spriteIndex"
-          :src="sprite"
-          class="pokemon-sprites"
-        />
-      </div>
-
-      <h2>Evoluções</h2>
+      <h2>{{ $t('infos.evolution') }}</h2>
       <hr />
       <div class="pokemon-chain">
-        <div>
-          <h3>Baby</h3>
-          <div class="flex-row" v-if="pokemon.evolution?.stage_1">
+        <div v-if="pokemon.evolution?.stage_1">
+          <h3>{{ $t('infos.baby') }}</h3>
+          <div class="flex-row">
             <div v-for="(imageUrl, index) in imageUrls.stage_1" :key="index">
               <img class="images-evolution" :src="imageUrl" />
               <a
@@ -48,11 +37,10 @@
               </a>
             </div>
           </div>
-          <div v-else>--</div>
         </div>
-        <div>
-          <h3>Basic</h3>
-          <div class="flex-row" v-if="pokemon.evolution?.stage_2">
+        <div v-if="pokemon.evolution?.stage_2">
+          <h3>{{ $t('infos.basic') }}</h3>
+          <div class="flex-row">
             <div v-for="(imageUrl, index) in imageUrls.stage_2" :key="index">
               <img class="images-evolution" :src="imageUrl" />
               <a
@@ -63,11 +51,10 @@
               </a>
             </div>
           </div>
-          <div v-else>--</div>
         </div>
-        <div>
-          <h3>Stage 1</h3>
-          <div class="flex-row" v-if="pokemon.evolution?.stage_3">
+        <div v-if="pokemon.evolution?.stage_3">
+          <h3>{{ $t('infos.stage_1') }}</h3>
+          <div class="flex-row">
             <div v-for="(imageUrl, index) in imageUrls.stage_3" :key="index">
               <img class="images-evolution" :src="imageUrl" />
               <a
@@ -78,11 +65,10 @@
               </a>
             </div>
           </div>
-          <div v-else>--</div>
         </div>
-        <div>
-          <h3>Stage 2</h3>
-          <div class="flex-row" v-if="pokemon.evolution?.stage_4">
+        <div v-if="pokemon.evolution?.stage_4">
+          <h3>{{ $t('infos.stage_2') }}</h3>
+          <div class="flex-row">
             <div v-for="(imageUrl, index) in imageUrls.stage_4" :key="index">
               <img class="images-evolution" :src="imageUrl" />
               <a
@@ -93,18 +79,64 @@
               </a>
             </div>
           </div>
-          <div v-else>--</div>
         </div>
       </div>
 
-      <h2>Movimentos de ataque</h2>
+      <h2>{{ $t('infos.sprites') }}</h2>
+      <hr />
+      <div class="imagens-sprites" v-if="pokemon.sprites?.length > 0">
+        <v-img
+          v-for="(sprite, spriteIndex) in pokemon.sprites"
+          :key="spriteIndex"
+          :src="sprite"
+          class="pokemon-sprites"
+        />
+      </div>
+      <div style="padding: 25px 0" v-else>
+        <p>
+          <strong>{{ $t('infos.no_sprites') }}</strong>
+        </p>
+      </div>
+
+      <h2>{{ $t('infos.games') }}</h2>
+      <hr />
+      <div class="pokemon-games" v-if="pokemon.game_indices?.length > 0">
+        <p>
+          <strong>{{ $t('infos.game_info') }}</strong>
+        </p>
+        <v-table
+          v-if="pokemon.game_indices"
+          height="300px"
+          fixed-header
+          density="comfortable"
+        >
+          <thead>
+            <tr>
+              <th style="font-weight: bold">{{ $t('infos.game') }}</th>
+              <th style="font-weight: bold">{{ $t('infos.position') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(gameIndex, index) in pokemon.game_indices" :key="index">
+              <td style="text-transform: capitalize">
+                Pokemon {{ gameIndex.version.name }} version
+              </td>
+              <td>{{ gameIndex.game_index }}</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </div>
+      <div style="padding: 25px 0" v-else>
+        <p>
+          <strong>
+            {{ $t('infos.no_games') }}
+          </strong>
+        </p>
+      </div>
+
+      <h2>{{ $t('infos.moves') }}</h2>
       <hr />
       <div class="pokemon-moves"></div>
-
-      <h2>Game Índices</h2>
-      <hr />
-      <div class="pokemon-games"></div>
-      <p>{{ pokemon.evolution }}</p>
     </div>
   </div>
 </template>
@@ -173,21 +205,12 @@ export default {
       return imageUrl;
     },
   },
-  watch: {
-    '$route.params.id': {
-      immediate: true,
-      handler(newId, oldId) {
-        console.log(oldId);
-        console.log(newId);
-        this.$router.push({ path: '/pokemon/' + newId });
-      },
-    },
-  },
 };
 </script>
 
 <style scoped>
 .flex {
+  width: 100%;
   gap: 60px;
 }
 .pokemon-image,
@@ -230,6 +253,14 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.pokemon-sprites {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 5px;
 }
 .pokemon-sprites,
 .images-evolution {
@@ -238,17 +269,61 @@ export default {
 }
 .pokemon-chain {
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  flex-direction: row;
+  gap: 15%;
 }
 .flex-row {
   display: flex;
   flex-direction: row;
   gap: 35px;
   flex-wrap: wrap;
+  text-align: center;
 }
 .evolution-name {
   text-transform: capitalize;
   display: block;
+  font-weight: bold;
+  color: var(--azul-claro);
+}
+.evolution-name:hover {
+  color: var(--vermelho-claro);
+}
+.pokemon-games p {
+  margin: 10px 0;
+  text-align: justify;
+}
+.v-table {
+  background: var(--cinza-claro);
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .flex {
+    flex-direction: column;
+    align-items: center;
+  }
+  .pokemon-infos {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .flex {
+    flex-direction: column;
+    align-items: center;
+  }
+  .pokemon-infos {
+    width: 100%;
+  }
+  .pokemon-image {
+    width: 70%;
+  }
+}
+@media only screen and (max-width: 479px) {
+  .pokemon-chain {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .pokemon-games p {
+    margin: 20px 0;
+  }
 }
 </style>
