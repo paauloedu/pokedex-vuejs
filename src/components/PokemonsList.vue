@@ -68,12 +68,6 @@ export default {
       this.temPokemonsFiltrados = true;
       this.localPokemonsFiltrados = newPokemons;
       this.pagination.offset = 0;
-      // console.log('valor de newPokemons', newPokemons);
-      // // Tem Pokemon Filtrado caso o Array retorne dados ou retorne Vazio
-      // if (newPokemons.length > 0 || newPokemons === []) {
-      //   this.temPokemonsFiltrados = true;
-      // }
-      // console.log('aq', this.temPokemonsFiltrados);
     },
   },
 
@@ -94,6 +88,7 @@ export default {
       }
     },
 
+    // Scroll infinito para obter mais pokemons
     async obterMaisPokemons() {
       try {
         if (!this.loading && !this.temPokemonsFiltrados) {
@@ -142,7 +137,6 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 25px;
-  min-height: 600px;
 }
 .card {
   display: flex;
@@ -153,8 +147,8 @@ export default {
   flex: 1 1 15%;
   transition: box-shadow 0.2s ease;
   cursor: pointer;
-  height: 385px;
-  width: 258px;
+  min-height: 345px;
+  min-width: 218px;
 }
 .card:hover {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -176,7 +170,11 @@ export default {
 }
 .pokemon-specie {
   color: var(--cinza-escuro);
-  font-size: 16px;
+  font-size: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
 }
 .pokemon-name {
   text-transform: capitalize;
@@ -205,5 +203,59 @@ export default {
 }
 .content {
   text-align: center;
+}
+
+@media only screen and (min-width: 1145px) and (max-width: 1675px) {
+  .card {
+    max-width: 168px;
+    max-height: 292px;
+    padding: 15px;
+    min-height: auto;
+    min-width: auto;
+  }
+}
+
+@media only screen and (min-width: 595px) and (max-width: 944px) {
+  .card {
+    max-width: 158px;
+    max-height: 282px;
+    padding: 45px;
+    min-height: auto;
+    min-width: auto;
+  }
+  .pokemon-specie {
+    font-size: 13px;
+  }
+  .card .flex {
+    gap: 8px;
+  }
+  .list {
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 595px) {
+  .column {
+    flex-direction: row;
+  }
+  .list {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  .card {
+    min-height: auto;
+    min-width: auto;
+    padding: 18px;
+  }
+  .card .flex {
+    min-width: 200px;
+  }
+}
+
+@media only screen and (max-width: 479px) {
+  .card .flex {
+    min-width: auto;
+  }
 }
 </style>
