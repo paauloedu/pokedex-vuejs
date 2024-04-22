@@ -1,11 +1,11 @@
 <template>
   <div class="flex">
     <v-icon icon="mdi-web" />
-    <span @click="setLocale('pt_BR')">PT</span>
+    <span @click="setLocale('pt_BR')" id="pt">PT</span>
     <p>|</p>
-    <span @click="setLocale('en_US')">EN</span>
+    <span @click="setLocale('en_US')" id="en">EN</span>
     <p>|</p>
-    <span @click="setLocale('es_ES')">ES</span>
+    <span @click="setLocale('es_ES')" id="es">ES</span>
   </div>
 </template>
 

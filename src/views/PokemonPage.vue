@@ -1,6 +1,6 @@
 <template>
   <LanguageBar />
-  <PokemonInfo :pokemonId="pokemonId" />
+  <PokemonInfo :pokemon-id="pokemonId" />
 </template>
 
 <script>

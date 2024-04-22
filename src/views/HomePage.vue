@@ -3,7 +3,7 @@
   <h1>Pokédex</h1>
   <p>{{ $t('search') }}</p>
   <FiltersBar @pokemons-filtrados="atualizarHomePage" />
-  <PokemonsList :pokemonsFiltrados="pokemonsFiltrados" />
+  <PokemonsList :pokemons-filtrados="pokemonsFiltrados" />
 </template>
 
 <script>

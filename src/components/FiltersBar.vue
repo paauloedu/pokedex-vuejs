@@ -4,7 +4,7 @@
     <!-- Barra de pesquisa -->
     <SearchBar
       v-model="nomeSelecionado"
-      :pokemonsName="nomes"
+      :pokemons-name="nomes"
       class="search-bar"
     />
 
