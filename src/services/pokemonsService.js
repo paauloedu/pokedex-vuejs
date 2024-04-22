@@ -71,7 +71,6 @@ async function obterEspecie(pokemonUrl) {
     const response = await apiService.get(pokemonUrl);
     const { species } = response.data;
 
-    //TODO: utils
     const especieResponse = await apiService.get(species.url);
     const genusEn = especieResponse.data.genera.find(
       (genus) => genus.language.name === 'en'

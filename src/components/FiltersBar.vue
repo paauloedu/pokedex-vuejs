@@ -46,7 +46,7 @@
         class="filter-button"
         style="height: 100%"
       >
-        <v-icon color="white" icon="mdi-reload" />
+        <v-icon color="white" icon="mdi-magnify" />
       </v-btn>
     </div>
   </div>
@@ -83,7 +83,6 @@ export default {
         this.pokemons = await obterPokemons({ limit: MAX_POKEMONS });
         this.tipos = await obterTodosTiposDePokemon();
 
-        // TODO: AJUSTAR posteriormente
         // Nomes com ID capitalize
         this.nomes = this.pokemons.map(
           (pokemon) => `${this.capitalize(pokemon.name)} (${pokemon.id})`
@@ -150,6 +149,10 @@ export default {
 .filter-type,
 .filter-specie {
   flex: 1 1 20%;
+}
+:deep(.v-input__control) {
+  background: white;
+  border-radius: 30px;
 }
 @media only screen and (min-width: 1024px) and (max-width: 1299px) {
   .search-bar {

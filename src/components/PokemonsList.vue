@@ -64,6 +64,11 @@ export default {
   },
 
   watch: {
+    /**
+     * Observador para pokemonsFiltrados
+     * @param {Array} newPokemons - Novos Pokémons filtrados.
+     * Define os novos pokémons filtrados e reinicia a paginação
+     */
     pokemonsFiltrados(newPokemons) {
       this.temPokemonsFiltrados = true;
       this.localPokemonsFiltrados = newPokemons;
@@ -72,7 +77,11 @@ export default {
   },
 
   methods: {
-    // TODO: Pokemons com imageURl null, tratar
+    /**
+     * Obtém a lista de Pokémons.
+     * @async
+     * @method obterListaDePokemons
+     */
     async obterListaDePokemons() {
       try {
         const { limit, offset } = this.pagination;
@@ -88,7 +97,11 @@ export default {
       }
     },
 
-    // Scroll infinito para obter mais pokemons
+    /**
+     * Obtém mais Pokémons para scroll infinito.
+     * @async
+     * @method obterMaisPokemons
+     */
     async obterMaisPokemons() {
       try {
         if (!this.loading && !this.temPokemonsFiltrados) {
@@ -110,6 +123,10 @@ export default {
       }
     },
 
+    /**
+     * Manipula o evento de scroll.
+     * @method handleScroll
+     */
     handleScroll() {
       //Verifico se ja carregou, chegou ao fim e se ja filtrei por pokemons
       if (
@@ -121,6 +138,11 @@ export default {
       }
     },
 
+    /**
+     * Verifica se o usuário chegou ao final da página.
+     * @method chegouAoFinalDaPagina
+     * @returns {boolean} - Verdadeiro se o usuário chegou ao final da página, senão, falso.
+     */
     chegouAoFinalDaPagina() {
       const alturaDaJanela = window.innerHeight;
       const scrollY = window.scrollY;
