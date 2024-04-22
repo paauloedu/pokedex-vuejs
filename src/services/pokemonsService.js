@@ -34,7 +34,7 @@ export const obterPokemons = async (params = {}) => {
     return dadosAdicionaisPokemon;
   } catch (error) {
     console.error('Não foi possível obter os pokemons:', error);
-    throw error;
+    // throw error;
   }
 };
 
@@ -44,17 +44,21 @@ export const obterPokemons = async (params = {}) => {
  * @returns {Object} As informações básicas do Pokémon.
  */
 async function obterPokemonBasicoPorId(pokemonId) {
-  const response = await apiService.get(`/pokemon/${pokemonId}`);
-  const { name, id, types, sprites } = response.data;
-  const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
+  try {
+    const response = await apiService.get(`/pokemon/${pokemonId}`);
+    const { name, id, types, sprites } = response.data;
+    const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
 
-  return {
-    name,
-    id,
-    types,
-    specie: specie,
-    imageUrl: sprites.other.home.front_default,
-  };
+    return {
+      name,
+      id,
+      types,
+      specie: specie,
+      imageUrl: sprites.other.home.front_default,
+    };
+  } catch (error) {
+    console.log('Não foi possível obter o pokémon básico:', error);
+  }
 }
 
 /**
@@ -63,17 +67,21 @@ async function obterPokemonBasicoPorId(pokemonId) {
  * @returns {Object} O objeto contendo a espécie do Pokémon.
  */
 async function obterEspecie(pokemonUrl) {
-  const response = await apiService.get(pokemonUrl);
-  const { species } = response.data;
+  try {
+    const response = await apiService.get(pokemonUrl);
+    const { species } = response.data;
 
-  //TODO: utils
-  const especieResponse = await apiService.get(species.url);
-  const genusEn = especieResponse.data.genera.find(
-    (genus) => genus.language.name === 'en'
-  );
-  const specie = genusEn ? genusEn.genus : null;
+    //TODO: utils
+    const especieResponse = await apiService.get(species.url);
+    const genusEn = especieResponse.data.genera.find(
+      (genus) => genus.language.name === 'en'
+    );
+    const specie = genusEn ? genusEn.genus : null;
 
-  return { specie };
+    return { specie };
+  } catch (error) {
+    console.log('Não foi possível obter a especie:', error);
+  }
 }
 
 /**
@@ -89,7 +97,7 @@ export const obterTodosTiposDePokemon = async () => {
     return tiposDePokemon;
   } catch (error) {
     console.error('Não foi possível obter os tipos:', error);
-    throw error;
+    // throw error;
   }
 };
 
@@ -99,37 +107,42 @@ export const obterTodosTiposDePokemon = async () => {
  * @returns {Object} As informações detalhadas do Pokémon.
  */
 export const obterPokemonPorId = async (pokemonId) => {
-  const response = await apiService.get(`/pokemon/${pokemonId}`);
-  const { name, id, types, sprites, species, game_indices, moves } =
-    response.data;
-  const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
+  try {
+    const response = await apiService.get(`/pokemon/${pokemonId}`);
+    const { name, id, types, sprites, species, game_indices, moves } =
+      response.data;
+    const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
 
-  const speciesId = extrairIdPelaUrl(species.url);
+    const speciesId = extrairIdPelaUrl(species.url);
 
-  const { chain } = await obterCadeiaDeEvolucao(speciesId);
-  const chainFormatado = limparDetalhesDeEvolucoes(chain);
-  const evolution = mapearEvolucaoPokemon(chainFormatado);
+    const { chain } = await obterCadeiaDeEvolucao(speciesId);
+    const chainFormatado = limparDetalhesDeEvolucoes(chain);
+    const evolution = mapearEvolucaoPokemon(chainFormatado);
 
-  const imagemUrls = extrairTodasSpriteUrl(sprites);
+    const imagemUrls = extrairTodasSpriteUrl(sprites);
 
-  //Extrair todas urls de movimentos
-  const moveUrls = moves.map((move) => move.move.url);
-  const movesData = await Promise.all(
-    moveUrls.map((url) => obterMovimentosDoPokemon(url))
-  );
+    //Extrair todas urls de movimentos
+    const moveUrls = moves.map((move) => move.move.url);
+    const movesData = await Promise.all(
+      moveUrls.map((url) => obterMovimentosDoPokemon(url))
+    );
 
-  return {
-    name,
-    id,
-    types,
-    specie: specie,
-    imageUrl: sprites.other.home.front_default,
-    gif: sprites.other.showdown.front_default,
-    sprites: imagemUrls,
-    evolution: evolution,
-    game_indices,
-    movesData,
-  };
+    return {
+      name,
+      id,
+      types,
+      specie: specie,
+      imageUrl: sprites.other.home.front_default,
+      gif: sprites.other.showdown.front_default,
+      sprites: imagemUrls,
+      evolution: evolution,
+      game_indices,
+      movesData,
+    };
+  } catch (error) {
+    console.error(`Erro ao obter pokémon por ID: ${pokemonId}`, error);
+    return {};
+  }
 };
 
 /**
@@ -151,7 +164,7 @@ async function obterCadeiaDeEvolucao(pokemonId) {
     return responseEvolutionChain.data;
   } catch (error) {
     console.error('Não foi possível obter a cadeia de evolução:', error);
-    throw error;
+    // throw error;
   }
 }
 
@@ -171,7 +184,7 @@ export const obterUrlDaImagemDoPokemon = async (pokemonName) => {
     return null;
   } catch (error) {
     console.error('Não foi possível obter a imagem:', error);
-    throw error;
+    // throw error;
   }
 };
 
@@ -201,6 +214,6 @@ async function obterMovimentosDoPokemon(moveUrls) {
     };
   } catch (error) {
     console.error('Não foi possível obter os movimentos do pokemon:', error);
-    throw error;
+    // throw error;
   }
 }

@@ -58,6 +58,7 @@ import { obterPokemons } from '@/services/pokemonsService';
 import { obterTodosTiposDePokemon } from '@/services/pokemonsService';
 
 export default {
+  emits: ['pokemons-filtrados'],
   data() {
     return {
       pokemons: [],

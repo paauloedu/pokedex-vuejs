@@ -38,6 +38,7 @@ export default {
   props: {
     pokemonsFiltrados: {
       type: Array,
+      default: () => [],
     },
   },
   data() {

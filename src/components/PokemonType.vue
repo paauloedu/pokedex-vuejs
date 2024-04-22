@@ -7,7 +7,10 @@
 <script>
 export default {
   props: {
-    typeName: String,
+    typeName: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     typeColor() {

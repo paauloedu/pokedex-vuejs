@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex" v-if="pokemon && Object.keys(pokemon).length !== 0">
     <div class="pokemon-image">
       <v-img :src="pokemon.imageUrl" />
     </div>
@@ -45,10 +45,15 @@
       <!-- Fim Jogos Presente -->
 
       <!-- Movimentos de Ataque -->
-      <h2>{{ $t('infos.moves') }}</h2>
+      <h2 style="margin-top: 20px">{{ $t('infos.moves') }}</h2>
       <hr />
       <MovesTable v-if="pokemon.movesData" :moves-data="pokemon.movesData" />
       <!-- Fim Movimentos de Ataque -->
+    </div>
+  </div>
+  <div class="not-content" v-else>
+    <div class="content">
+      <h3>{{ $t('infos.no_content') }}</h3>
     </div>
   </div>
 </template>
@@ -170,7 +175,15 @@ export default {
   height: 50px;
   display: inline-block;
 }
-
+.not-content {
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content {
+  text-align: center;
+}
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   .flex {
     flex-direction: column;

@@ -16,16 +16,17 @@ export const pt_BR = {
     stage_1: 'Estágio 1',
     stage_2: 'Estágio 2',
     sprites: 'Imagens do Pokémon',
-    no_sprites: 'Este pokemon não possui nenhuma imagem disponível.',
+    no_sprites: 'Este Pokémon não possui nenhuma imagem disponível.',
     games: 'Jogos presente',
     game_info:
       'Confira em quais versões dos jogos Pokémon e em que posição o Pokémon selecionado pode ser encontrado.',
     game: 'Jogo',
     position: 'Posição',
     no_games:
-      'Este pokemon não está presente em nenhuma versão dos jogos Pokémon.',
+      'Este Pokémon não está presente em nenhuma versão dos jogos Pokémon.',
     moves: 'Movimentos de ataque',
-    no_moves: 'Este pokemon não possui movimentos de ataque.',
+    no_moves: 'Este Pokémon não possui movimentos de ataque.',
     move_info: 'Confira os detalhes de movimentos deste Pokémon.',
+    no_content: 'Não há Pokémon que atendam a esse parametro.',
   },
 };
