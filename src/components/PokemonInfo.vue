@@ -26,164 +26,29 @@
       <!-- Evolução -->
       <h2>{{ $t('infos.evolution') }}</h2>
       <hr />
-      <div class="pokemon-chain">
-        <div v-if="pokemon.evolution?.stage_1">
-          <h3>{{ $t('infos.baby') }}</h3>
-          <div class="flex-row">
-            <div v-for="(imageUrl, index) in imageUrls.stage_1" :key="index">
-              <img class="images-evolution" :src="imageUrl" />
-              <a
-                :href="'/pokemon/' + pokemon.evolution.stage_1[index]"
-                class="evolution-name"
-              >
-                {{ pokemon.evolution.stage_1[index] }}
-              </a>
-            </div>
-          </div>
-        </div>
-        <div v-if="pokemon.evolution?.stage_2">
-          <h3>{{ $t('infos.basic') }}</h3>
-          <div class="flex-row">
-            <div v-for="(imageUrl, index) in imageUrls.stage_2" :key="index">
-              <img class="images-evolution" :src="imageUrl" />
-              <a
-                :href="'/pokemon/' + pokemon.evolution.stage_2[index]"
-                class="evolution-name"
-              >
-                {{ pokemon.evolution.stage_2[index] }}
-              </a>
-            </div>
-          </div>
-        </div>
-        <div v-if="pokemon.evolution?.stage_3">
-          <h3>{{ $t('infos.stage_1') }}</h3>
-          <div class="flex-row">
-            <div v-for="(imageUrl, index) in imageUrls.stage_3" :key="index">
-              <img class="images-evolution" :src="imageUrl" />
-              <a
-                :href="'/pokemon/' + pokemon.evolution.stage_3[index]"
-                class="evolution-name"
-              >
-                {{ pokemon.evolution.stage_3[index] }}
-              </a>
-            </div>
-          </div>
-        </div>
-        <div v-if="pokemon.evolution?.stage_4">
-          <h3>{{ $t('infos.stage_2') }}</h3>
-          <div class="flex-row">
-            <div v-for="(imageUrl, index) in imageUrls.stage_4" :key="index">
-              <img class="images-evolution" :src="imageUrl" />
-              <a
-                :href="'/pokemon/' + pokemon.evolution.stage_4[index]"
-                class="evolution-name"
-              >
-                {{ pokemon.evolution.stage_4[index] }}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <EvolutionChain :pokemon="pokemon" :image-urls="imageUrls" />
       <!-- Fim Evolucao -->
 
       <!-- Sprites -->
       <h2>{{ $t('infos.sprites') }}</h2>
       <hr />
-      <div class="imagens-sprites" v-if="pokemon.sprites?.length > 0">
-        <v-img
-          v-for="(sprite, spriteIndex) in pokemon.sprites"
-          :key="spriteIndex"
-          :src="sprite"
-          class="pokemon-sprites"
-        />
-      </div>
-      <div style="padding: 25px 0" v-else>
-        <p>
-          <strong>{{ $t('infos.no_sprites') }}</strong>
-        </p>
-      </div>
+      <SpritesGallery v-if="pokemon.sprites" :sprites="pokemon.sprites" />
       <!-- Fim Sprites -->
 
       <!-- Jogos Presente -->
       <h2>{{ $t('infos.games') }}</h2>
       <hr />
-      <div class="pokemon-games" v-if="pokemon.game_indices?.length > 0">
-        <p>
-          <strong>{{ $t('infos.game_info') }}</strong>
-        </p>
-        <v-table height="300px" fixed-header density="comfortable">
-          <thead>
-            <tr>
-              <th style="font-weight: bold">{{ $t('infos.game') }}</th>
-              <th style="font-weight: bold">{{ $t('infos.position') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(gameIndex, index) in pokemon.game_indices" :key="index">
-              <td style="text-transform: capitalize">
-                Pokemon {{ gameIndex.version.name }} version
-              </td>
-              <td>{{ gameIndex.game_index }}</td>
-            </tr>
-          </tbody>
-        </v-table>
-      </div>
-      <div style="padding: 25px 0" v-else>
-        <p>
-          <strong>
-            {{ $t('infos.no_games') }}
-          </strong>
-        </p>
-      </div>
+      <GamesTable
+        v-if="pokemon.game_indices"
+        :games-indices="pokemon.game_indices"
+      />
       <!-- Fim Jogos Presente -->
 
       <!-- Movimentos de Ataque -->
       <h2>{{ $t('infos.moves') }}</h2>
       <hr />
-      <div class="pokemon-moves" v-if="pokemon.movesData?.length > 0">
-        <p>
-          <strong>{{ $t('infos.game_info') }}</strong>
-        </p>
-        <v-table height="300px" fixed-header density="comfortable">
-          <thead>
-            <tr>
-              <th style="font-weight: bold">Nome</th>
-              <th style="font-weight: bold">Tipo</th>
-              <th style="font-weight: bold">Classe</th>
-              <th style="font-weight: bold">Poder</th>
-              <th style="font-weight: bold">Precisão</th>
-              <th style="font-weight: bold">Efeito</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(moveIndex, index) in pokemon.movesData"
-              :key="index"
-              style="text-transform: capitalize"
-            >
-              <td>
-                {{ moveIndex.name ?? '--' }}
-              </td>
-              <td>{{ moveIndex.type ?? '--' }}</td>
-              <td>{{ moveIndex.damage_class ?? '--' }}</td>
-              <td>{{ moveIndex.power ?? '--' }}</td>
-              <td>
-                {{ moveIndex.accuracy ? moveIndex.accuracy + `%` : '--' }}
-              </td>
-              <td style="min-width: 320px">
-                {{ moveIndex.shortEffect ?? '--' }}
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-      </div>
-      <div style="padding: 25px 0" v-else>
-        <p>
-          <strong>
-            {{ $t('infos.no_moves') }}
-          </strong>
-        </p>
-      </div>
+      <MovesTable v-if="pokemon.movesData" :moves-data="pokemon.movesData" />
+      <!-- Fim Movimentos de Ataque -->
     </div>
   </div>
 </template>
@@ -194,6 +59,10 @@ import {
   obterUrlDaImagemDoPokemon,
 } from '../services/pokemonsService';
 import PokemonType from './PokemonType.vue';
+import MovesTable from './MovesTable.vue';
+import GamesTable from './GamesTable.vue';
+import SpritesGallery from './SpritesGallery.vue';
+import EvolutionChain from './EvolutionChain.vue';
 
 export default {
   data() {
@@ -213,7 +82,13 @@ export default {
       required: true,
     },
   },
-  components: { PokemonType },
+  components: {
+    PokemonType,
+    MovesTable,
+    GamesTable,
+    SpritesGallery,
+    EvolutionChain,
+  },
   async created() {
     this.pokemon = await obterPokemonPorId(this.pokemonId);
 
@@ -295,54 +170,6 @@ export default {
   height: 50px;
   display: inline-block;
 }
-.imagens-sprites {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-.pokemon-sprites {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-  margin-bottom: 5px;
-}
-.pokemon-sprites,
-.images-evolution {
-  height: 50px;
-  width: 50px;
-}
-.pokemon-chain {
-  display: flex;
-  flex-direction: row;
-  gap: 15%;
-}
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  gap: 35px;
-  flex-wrap: wrap;
-  text-align: center;
-}
-.evolution-name {
-  text-transform: capitalize;
-  display: block;
-  font-weight: bold;
-  color: var(--azul-claro);
-}
-.evolution-name:hover {
-  color: var(--vermelho-claro);
-}
-.pokemon-games p,
-.pokemon-moves p {
-  margin: 10px 0;
-  text-align: justify;
-}
-.v-table {
-  background: var(--cinza-claro);
-}
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   .flex {
@@ -363,19 +190,6 @@ export default {
   }
   .pokemon-image {
     width: 70%;
-  }
-  /* .pokemon-moves tr > td:last-child,
-  .pokemon-moves tr > th:last-child {
-    display: none;
-  } */
-}
-@media only screen and (max-width: 479px) {
-  .pokemon-chain {
-    flex-direction: column;
-    gap: 30px;
-  }
-  .pokemon-games p {
-    margin: 20px 0;
   }
 }
 </style>

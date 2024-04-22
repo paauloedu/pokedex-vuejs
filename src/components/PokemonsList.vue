@@ -83,7 +83,7 @@ export default {
         // Os pokemons que quero exibir são os filtrados
         this.localPokemonsFiltrados = [...this.pokemons];
       } catch (error) {
-        console.log(error);
+        console.error('Erro ao obter lista de Pokémons:', error);
       }
     },
 
@@ -135,6 +135,7 @@ export default {
 .list {
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 25px;
 }
 .card {

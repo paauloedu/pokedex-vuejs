@@ -36,7 +36,6 @@ export function extrairTodasSpriteUrl(sprites) {
  * @returns {Object} O objeto de cadeia de evolução formatado.
  */
 export function limparDetalhesDeEvolucoes(chain) {
-  console.log('a', chain);
   // Removo o evolution_details do objeto chain
   delete chain.evolution_details;
 
@@ -100,6 +99,5 @@ export function mapearEvolucaoPokemon(chainFormatado) {
    * stage_3 = stage_1
    * stage_4 = stage_2
    */
-  console.log(chainFormatado);
   return evolution;
 }

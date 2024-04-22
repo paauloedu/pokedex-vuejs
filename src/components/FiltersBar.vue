@@ -132,7 +132,6 @@ export default {
         );
       }
 
-      console.log(pokemonsFiltrados);
       this.$emit('pokemons-filtrados', pokemonsFiltrados);
     },
   },

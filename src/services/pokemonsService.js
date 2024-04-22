@@ -31,7 +31,6 @@ export const obterPokemons = async (params = {}) => {
         };
       })
     );
-    console.log(dadosAdicionaisPokemon);
     return dadosAdicionaisPokemon;
   } catch (error) {
     console.error('Não foi possível obter os pokemons:', error);
@@ -118,7 +117,6 @@ export const obterPokemonPorId = async (pokemonId) => {
   const movesData = await Promise.all(
     moveUrls.map((url) => obterMovimentosDoPokemon(url))
   );
-  console.log(movesData);
 
   return {
     name,
@@ -145,7 +143,6 @@ async function obterCadeiaDeEvolucao(pokemonId) {
     const { url } = response.data.evolution_chain;
 
     const evolutionId = extrairIdPelaUrl(url);
-    console.log(evolutionId);
 
     const responseEvolutionChain = await apiService.get(
       `/evolution-chain/${evolutionId}`
@@ -194,7 +191,6 @@ async function obterMovimentosDoPokemon(moveUrls) {
     );
     const shortEffect = effectEn ? effectEn.short_effect : null;
 
-    console.log(shortEffect);
     return {
       name,
       type: type.name,
