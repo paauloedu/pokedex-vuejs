@@ -4,6 +4,12 @@ import { extrairTodasSpriteUrl } from '../utils/pokemonUtils';
 import { limparDetalhesDeEvolucoes } from '../utils/pokemonUtils';
 import { mapearEvolucaoPokemon } from '../utils/pokemonUtils';
 
+/**
+ * Obtém informações básicas de todos os Pokémons.
+ * @param {Object} params - Parâmetros da solicitação.
+ * @returns {Object[]} Uma matriz contendo as informações básicas de todos os Pokémons.
+ * Cada objeto contém: name, id, types, specie e imageUrl.
+ */
 export const obterPokemons = async (params = {}) => {
   try {
     const response = await apiService.get('/pokemon', { params });
@@ -33,6 +39,11 @@ export const obterPokemons = async (params = {}) => {
   }
 };
 
+/**
+ * Obtém informações básicas de um Pokémon por ID.
+ * @param {number} pokemonId - O ID do Pokémon.
+ * @returns {Object} As informações básicas do Pokémon.
+ */
 async function obterPokemonBasicoPorId(pokemonId) {
   const response = await apiService.get(`/pokemon/${pokemonId}`);
   const { name, id, types, sprites } = response.data;
@@ -47,7 +58,11 @@ async function obterPokemonBasicoPorId(pokemonId) {
   };
 }
 
-//TODO: Documentar se der tempo!
+/**
+ * Obtém a espécie de um Pokémon.
+ * @param {string} pokemonUrl - A URL do Pokémon.
+ * @returns {Object} O objeto contendo a espécie do Pokémon.
+ */
 async function obterEspecie(pokemonUrl) {
   const response = await apiService.get(pokemonUrl);
   const { species } = response.data;
@@ -62,6 +77,10 @@ async function obterEspecie(pokemonUrl) {
   return { specie };
 }
 
+/**
+ * Obtém todos os tipos de Pokémon.
+ * @returns {string[]} Uma matriz contendo todos os tipos de Pokémon.
+ */
 export const obterTodosTiposDePokemon = async () => {
   try {
     const response = await apiService.get('/type');
@@ -75,6 +94,11 @@ export const obterTodosTiposDePokemon = async () => {
   }
 };
 
+/**
+ * Obtém informações detalhadas de um Pokémon por ID.
+ * @param {number} pokemonId - O ID do Pokémon.
+ * @returns {Object} As informações detalhadas do Pokémon.
+ */
 export const obterPokemonPorId = async (pokemonId) => {
   const response = await apiService.get(`/pokemon/${pokemonId}`);
   const { name, id, types, sprites, species, game_indices, moves } =
@@ -84,8 +108,8 @@ export const obterPokemonPorId = async (pokemonId) => {
   const speciesId = extrairIdPelaUrl(species.url);
 
   const { chain } = await obterCadeiaDeEvolucao(speciesId);
-  const chainFiltrado = limparDetalhesDeEvolucoes(chain);
-  const evolution = mapearEvolucaoPokemon(chainFiltrado);
+  const chainFormatado = limparDetalhesDeEvolucoes(chain);
+  const evolution = mapearEvolucaoPokemon(chainFormatado);
 
   const imagemUrls = extrairTodasSpriteUrl(sprites);
 
@@ -110,12 +134,16 @@ export const obterPokemonPorId = async (pokemonId) => {
   };
 };
 
+/**
+ * Obtém a cadeia completa de evolução de um Pokémon.
+ * @param {number} pokemonId - O ID do Pokémon.
+ * @returns {Object} A cadeia completa de evolução do Pokémon.
+ */
 async function obterCadeiaDeEvolucao(pokemonId) {
   try {
     const response = await apiService.get(`/pokemon-species/${pokemonId}`);
     const { url } = response.data.evolution_chain;
 
-    // Extraindo o id da url
     const evolutionId = extrairIdPelaUrl(url);
     console.log(evolutionId);
 
@@ -130,6 +158,11 @@ async function obterCadeiaDeEvolucao(pokemonId) {
   }
 }
 
+/**
+ * Obtém a URL da imagem de um Pokémon pelo nome.
+ * @param {string} pokemonName - O nome do Pokémon.
+ * @returns {string|null} A URL da imagem do Pokémon ou null se não houver imagem.
+ */
 export const obterUrlDaImagemDoPokemon = async (pokemonName) => {
   try {
     const response = await apiService.get(`/pokemon/${pokemonName}`);
@@ -145,6 +178,11 @@ export const obterUrlDaImagemDoPokemon = async (pokemonName) => {
   }
 };
 
+/**
+ * Obtém informações detalhadas de movimentos de um Pokémon.
+ * @param {string} moveUrls - A URL do movimento do Pokémon.
+ * @returns {Object} As informações detalhadas do movimento do Pokémon.
+ */
 async function obterMovimentosDoPokemon(moveUrls) {
   try {
     const response = await apiService.get(moveUrls);
