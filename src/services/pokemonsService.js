@@ -77,19 +77,24 @@ export const obterTodosTiposDePokemon = async () => {
 
 export const obterPokemonPorId = async (pokemonId) => {
   const response = await apiService.get(`/pokemon/${pokemonId}`);
-  const { name, id, types, sprites, species, game_indices } = response.data;
+  const { name, id, types, sprites, species, game_indices, moves } =
+    response.data;
   const { specie } = await obterEspecie(`/pokemon/${pokemonId}`);
 
   const speciesId = extrairIdPelaUrl(species.url);
 
   const { chain } = await obterCadeiaDeEvolucao(speciesId);
   const chainFiltrado = limparDetalhesDeEvolucoes(chain);
-  console.log(chainFiltrado);
   const evolution = mapearEvolucaoPokemon(chainFiltrado);
-  console.log(evolution);
 
   const imagemUrls = extrairTodasSpriteUrl(sprites);
-  console.log(imagemUrls);
+
+  //Extrair todas urls de movimentos
+  const moveUrls = moves.map((move) => move.move.url);
+  const movesData = await Promise.all(
+    moveUrls.map((url) => obterMovimentosDoPokemon(url))
+  );
+  console.log(movesData);
 
   return {
     name,
@@ -101,6 +106,7 @@ export const obterPokemonPorId = async (pokemonId) => {
     sprites: imagemUrls,
     evolution: evolution,
     game_indices,
+    movesData,
   };
 };
 
@@ -138,3 +144,29 @@ export const obterUrlDaImagemDoPokemon = async (pokemonName) => {
     throw error;
   }
 };
+
+async function obterMovimentosDoPokemon(moveUrls) {
+  try {
+    const response = await apiService.get(moveUrls);
+    const { name, type, damage_class, power, accuracy, effect_entries } =
+      response.data;
+
+    const effectEn = effect_entries.find(
+      (effect) => effect.language.name === 'en'
+    );
+    const shortEffect = effectEn ? effectEn.short_effect : null;
+
+    console.log(shortEffect);
+    return {
+      name,
+      type: type.name,
+      damage_class: damage_class.name,
+      power,
+      accuracy,
+      shortEffect,
+    };
+  } catch (error) {
+    console.error('Não foi possível obter os movimentos do pokemon:', error);
+    throw error;
+  }
+}

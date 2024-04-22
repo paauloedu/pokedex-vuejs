@@ -25,5 +25,7 @@ export const pt_BR = {
     no_games:
       'Este pokemon não está presente em nenhuma versão dos jogos Pokémon.',
     moves: 'Movimentos de ataque',
+    no_moves: 'Este pokemon não possui movimentos de ataque.',
+    move_info: 'Confira os detalhes de movimentos deste Pokémon.',
   },
 };

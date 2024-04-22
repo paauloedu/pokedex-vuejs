@@ -25,5 +25,7 @@ export const en_US = {
     no_games:
       'This pokemon is not present in any version of the Pokémon games.',
     moves: 'Attack moves',
+    no_moves: 'This pokemon has no attack moves.',
+    move_info: 'Check out the details of this Pokémon movements.',
   },
 };

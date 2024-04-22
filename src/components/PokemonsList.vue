@@ -1,5 +1,4 @@
 <template>
-  <!-- FIXME: Fazer o caso para busca vazia -->
   <div class="not-content" v-if="this.localPokemonsFiltrados.length === 0">
     <div class="content">
       <h3>Não há pokemons que atendam a esse filtro.</h3>

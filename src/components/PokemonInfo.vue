@@ -5,6 +5,7 @@
     </div>
 
     <div class="pokemon-infos">
+      <!-- Nome, Tipo, Especie -->
       <h1 class="pokemon-name">
         <v-img v-if="pokemon.gif" class="pokemon-gif" :src="pokemon.gif" />
         {{ pokemon.name }}
@@ -20,7 +21,9 @@
           :type-name="type.type.name"
         />
       </div>
+      <!-- Fim Nome, Tipo, Especie -->
 
+      <!-- Evolução -->
       <h2>{{ $t('infos.evolution') }}</h2>
       <hr />
       <div class="pokemon-chain">
@@ -81,7 +84,9 @@
           </div>
         </div>
       </div>
+      <!-- Fim Evolucao -->
 
+      <!-- Sprites -->
       <h2>{{ $t('infos.sprites') }}</h2>
       <hr />
       <div class="imagens-sprites" v-if="pokemon.sprites?.length > 0">
@@ -97,19 +102,16 @@
           <strong>{{ $t('infos.no_sprites') }}</strong>
         </p>
       </div>
+      <!-- Fim Sprites -->
 
+      <!-- Jogos Presente -->
       <h2>{{ $t('infos.games') }}</h2>
       <hr />
       <div class="pokemon-games" v-if="pokemon.game_indices?.length > 0">
         <p>
           <strong>{{ $t('infos.game_info') }}</strong>
         </p>
-        <v-table
-          v-if="pokemon.game_indices"
-          height="300px"
-          fixed-header
-          density="comfortable"
-        >
+        <v-table height="300px" fixed-header density="comfortable">
           <thead>
             <tr>
               <th style="font-weight: bold">{{ $t('infos.game') }}</th>
@@ -133,10 +135,55 @@
           </strong>
         </p>
       </div>
+      <!-- Fim Jogos Presente -->
 
+      <!-- Movimentos de Ataque -->
       <h2>{{ $t('infos.moves') }}</h2>
       <hr />
-      <div class="pokemon-moves"></div>
+      <div class="pokemon-moves" v-if="pokemon.movesData?.length > 0">
+        <p>
+          <strong>{{ $t('infos.game_info') }}</strong>
+        </p>
+        <v-table height="300px" fixed-header density="comfortable">
+          <thead>
+            <tr>
+              <th style="font-weight: bold">Nome</th>
+              <th style="font-weight: bold">Tipo</th>
+              <th style="font-weight: bold">Classe</th>
+              <th style="font-weight: bold">Poder</th>
+              <th style="font-weight: bold">Precisão</th>
+              <th style="font-weight: bold">Efeito</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(moveIndex, index) in pokemon.movesData"
+              :key="index"
+              style="text-transform: capitalize"
+            >
+              <td>
+                {{ moveIndex.name ?? '--' }}
+              </td>
+              <td>{{ moveIndex.type ?? '--' }}</td>
+              <td>{{ moveIndex.damage_class ?? '--' }}</td>
+              <td>{{ moveIndex.power ?? '--' }}</td>
+              <td>
+                {{ moveIndex.accuracy ? moveIndex.accuracy + `%` : '--' }}
+              </td>
+              <td style="min-width: 320px">
+                {{ moveIndex.shortEffect ?? '--' }}
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </div>
+      <div style="padding: 25px 0" v-else>
+        <p>
+          <strong>
+            {{ $t('infos.no_moves') }}
+          </strong>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -288,7 +335,8 @@ export default {
 .evolution-name:hover {
   color: var(--vermelho-claro);
 }
-.pokemon-games p {
+.pokemon-games p,
+.pokemon-moves p {
   margin: 10px 0;
   text-align: justify;
 }
@@ -316,6 +364,10 @@ export default {
   .pokemon-image {
     width: 70%;
   }
+  /* .pokemon-moves tr > td:last-child,
+  .pokemon-moves tr > th:last-child {
+    display: none;
+  } */
 }
 @media only screen and (max-width: 479px) {
   .pokemon-chain {
