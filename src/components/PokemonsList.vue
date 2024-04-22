@@ -1,7 +1,12 @@
 <template>
-  <div class="not-content" v-if="this.localPokemonsFiltrados.length === 0">
+  <div v-if="this.firstLoading" class="in-progress">
+    <div class="loading">
+      <h3>{{ $t('loading') }}</h3>
+    </div>
+  </div>
+  <div class="not-content" v-else-if="this.localPokemonsFiltrados.length === 0">
     <div class="content">
-      <h3>Não há pokemons que atendam a esse filtro.</h3>
+      <h3>{{ $t('no_pokemons_filter') }}</h3>
     </div>
   </div>
   <div class="flex list" v-else>
@@ -50,10 +55,12 @@ export default {
         offset: 0,
       },
       loading: false,
+      firstLoading: false,
     };
   },
   components: { PokemonType },
   async created() {
+    this.firstLoading = true;
     await this.obterListaDePokemons();
   },
   mounted() {
@@ -92,6 +99,7 @@ export default {
 
         // Os pokemons que quero exibir são os filtrados
         this.localPokemonsFiltrados = [...this.pokemons];
+        this.firstLoading = false;
       } catch (error) {
         console.error('Erro ao obter lista de Pokémons:', error);
       }
@@ -218,13 +226,15 @@ export default {
 .column {
   flex-direction: column;
 }
-.not-content {
+.not-content,
+.in-progress {
   height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.content {
+.content,
+.loading {
   text-align: center;
 }
 

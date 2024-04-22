@@ -9,6 +9,8 @@ export const es_ES = {
   search_placeholder: 'Buscar el Pokémon deseado...',
   type: 'Tipo',
   specie: 'Especie',
+  no_pokemons_filter: 'No hay Pokémon que cumplan este filtro.',
+  loading: 'Cargando, por favor espere...',
   infos: {
     evolution: 'Evoluciones',
     baby: 'Bebé',
